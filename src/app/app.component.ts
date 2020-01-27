@@ -2,6 +2,7 @@ import { animate, style, transition, trigger } from '@angular/animations';
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { BehaviorSubject, combineLatest, merge, Observable, Subject } from 'rxjs';
 import { map, pluck, take, withLatestFrom } from 'rxjs/operators';
+import { SwUpdatesService } from 'src/app/sw-update.service';
 import { WordsService } from 'src/app/words.service';
 
 @Component({
@@ -43,7 +44,10 @@ export class AppComponent implements OnInit {
   private readonly indexSubject = new BehaviorSubject<number>(0);
   private readonly emptySubject = new Subject<string>();
 
-  constructor(private readonly wordsService: WordsService) {}
+  constructor(
+    private readonly wordsService: WordsService,
+    private readonly swUpdatesService: SwUpdatesService,
+  ) {}
 
   ngOnInit(): void {
     this.letters$ = combineLatest([
@@ -61,6 +65,9 @@ export class AppComponent implements OnInit {
       }),
     );
     this.wordsService.refreshWords();
+    this.swUpdatesService.updateActivated.subscribe(() => {
+      console.log('activated update!');
+    });
   }
 
   captureLetter(event: KeyboardEvent): void {
