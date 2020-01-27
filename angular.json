@@ -1,6 +1,6 @@
 {
   "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
-  "version": 1, 
+  "version": 1,
   "newProjectRoot": "projects",
   "projects": {
     "hf-words": {
@@ -34,7 +34,7 @@
       },
       "root": "",
       "sourceRoot": "src",
-      "prefix": "app",
+      "prefix": "hfw",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
@@ -103,6 +103,10 @@
           }
         }
       }
-    }},
-  "defaultProject": "hf-words"
+    }
+  },
+  "defaultProject": "hf-words",
+  "cli": {
+    "analytics": "b1d797fe-25c6-4646-96db-21ddd16933a2"
+  }
 }

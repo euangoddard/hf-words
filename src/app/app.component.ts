@@ -1,32 +1,96 @@
-import { Component } from '@angular/core';
+import { animate, style, transition, trigger } from '@angular/animations';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { BehaviorSubject, combineLatest, merge, Observable, Subject } from 'rxjs';
+import { map, pluck, take, withLatestFrom } from 'rxjs/operators';
+import { WordsService } from 'src/app/words.service';
 
 @Component({
-  selector: 'app-root',
+  selector: 'hfw-root',
   template: `
-    <!--The content below is only a placeholder and can be replaced.-->
-    <div style="text-align:center" class="content">
-      <h1>
-        Welcome to {{title}}!
-      </h1>
-      <span style="display: block">{{ title }} app is running!</span>
-      <img width="300" alt="Angular Logo" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTAgMjUwIj4KICAgIDxwYXRoIGZpbGw9IiNERDAwMzEiIGQ9Ik0xMjUgMzBMMzEuOSA2My4ybDE0LjIgMTIzLjFMMTI1IDIzMGw3OC45LTQzLjcgMTQuMi0xMjMuMXoiIC8+CiAgICA8cGF0aCBmaWxsPSIjQzMwMDJGIiBkPSJNMTI1IDMwdjIyLjItLjFWMjMwbDc4LjktNDMuNyAxNC4yLTEyMy4xTDEyNSAzMHoiIC8+CiAgICA8cGF0aCAgZmlsbD0iI0ZGRkZGRiIgZD0iTTEyNSA1Mi4xTDY2LjggMTgyLjZoMjEuN2wxMS43LTI5LjJoNDkuNGwxMS43IDI5LjJIMTgzTDEyNSA1Mi4xem0xNyA4My4zaC0zNGwxNy00MC45IDE3IDQwLjl6IiAvPgogIDwvc3ZnPg==">
+    <div *alias="letters$ | async as letters">
+      <hfw-letter
+        *ngFor="let letter of letters; trackBy: trackByLetter"
+        [letter]="letter.symbol"
+        [done]="letter.done"
+        @letterAnimation
+      ></hfw-letter>
     </div>
-    <h2>Here are some links to help you start: </h2>
-    <ul>
-      <li>
-        <h2><a target="_blank" rel="noopener" href="https://angular.io/tutorial">Tour of Heroes</a></h2>
-      </li>
-      <li>
-        <h2><a target="_blank" rel="noopener" href="https://angular.io/cli">CLI Documentation</a></h2>
-      </li>
-      <li>
-        <h2><a target="_blank" rel="noopener" href="https://blog.angular.io/">Angular blog</a></h2>
-      </li>
-    </ul>
-    
+    <input
+      class="hidden-capture"
+      type="text"
+      autofocus
+      (keyup)="captureLetter($event)"
+      (blur)="refocusCapture($event)"
+    />
   `,
-  styles: []
+  styleUrls: ['./app.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  animations: [
+    trigger('letterAnimation', [
+      transition(':enter', [
+        style({ opacity: 0, transform: 'scale(0.01)' }),
+        animate('0.5s', style({ opacity: 1, transform: 'scale(1)' })),
+      ]),
+      transition(':leave', [animate('0.5s', style({ opacity: 0, transform: 'scale(0)' }))]),
+    ]),
+  ],
 })
-export class AppComponent {
-  title = 'hf-words';
+export class AppComponent implements OnInit {
+  readonly trackByLetter = (index: number, letter: Letter) => `${letter.word}:${letter.symbol}`;
+
+  letters$: Observable<Letter[]>;
+
+  private readonly indexSubject = new BehaviorSubject<number>(0);
+  private readonly emptySubject = new Subject<string>();
+
+  constructor(private readonly wordsService: WordsService) {}
+
+  ngOnInit(): void {
+    this.letters$ = combineLatest([
+      merge(this.wordsService.word$.pipe(pluck('word')), this.emptySubject),
+      this.indexSubject,
+    ]).pipe(
+      map(([word, index]) => {
+        return word.split('').map((letter, i) => {
+          return {
+            symbol: letter,
+            done: i < index,
+            word,
+          };
+        });
+      }),
+    );
+    this.wordsService.refreshWords();
+  }
+
+  captureLetter(event: KeyboardEvent): void {
+    this.letters$.pipe(withLatestFrom(this.indexSubject), take(1)).subscribe(([letters, index]) => {
+      const letter = letters[index].symbol;
+      if (letter.toLowerCase() === event.key.toLowerCase()) {
+        let maxIndex = letters.length - 1;
+        if (index < maxIndex) {
+          this.indexSubject.next(index + 1);
+        } else if (index === maxIndex) {
+          this.indexSubject.next(index + 1);
+          setTimeout(() => {
+            this.emptySubject.next('');
+          }, 500);
+          setTimeout(() => {
+            this.wordsService.next();
+            this.indexSubject.next(0);
+          }, 1000);
+        }
+      }
+    });
+  }
+
+  refocusCapture(event: FocusEvent): void {
+    (event.target as HTMLInputElement).focus();
+  }
+}
+
+interface Letter {
+  symbol: string;
+  done: boolean;
+  word: string;
 }

@@ -1,0 +1,23 @@
+:host {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+	z-index: 1;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+.hidden-capture {
+	opacity: 0.01;
+	position: absolute;
+	top: 0;
+	right: 0;
+	appearance: none;
+	width: 1px;
+	height: 1px;
+}
