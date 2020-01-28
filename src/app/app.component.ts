@@ -1,5 +1,13 @@
 import { animate, style, transition, trigger } from '@angular/animations';
-import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, OnInit, Type, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  OnInit,
+  Type,
+  ViewChild,
+} from '@angular/core';
 import { get } from 'lodash-es';
 import { BehaviorSubject, combineLatest, merge, Observable, Subject } from 'rxjs';
 import { map, pluck, take, withLatestFrom } from 'rxjs/operators';
@@ -9,7 +17,7 @@ import { WordsService } from 'src/app/words.service';
 @Component({
   selector: 'hfw-root',
   template: `
-    <p>Read the word aloud and type its letters</p>
+    <p>Click anywhere to begin<br />Read the word aloud and type its letters</p>
     <div *alias="letters$ | async as letters">
       <hfw-letter
         *ngFor="let letter of letters; trackBy: trackByLetter"
@@ -85,7 +93,6 @@ export class AppComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit(): void {
     this.inputElement.nativeElement.focus();
-
   }
 
   handleInput(event: InputEvent): void {
