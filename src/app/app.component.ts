@@ -1,5 +1,6 @@
 import { animate, style, transition, trigger } from '@angular/animations';
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { get } from 'lodash-es';
 import { BehaviorSubject, combineLatest, merge, Observable, Subject } from 'rxjs';
 import { map, pluck, take, withLatestFrom } from 'rxjs/operators';
 import { SwUpdatesService } from 'src/app/sw-update.service';
@@ -73,12 +74,15 @@ export class AppComponent implements OnInit {
   handleInput(event: InputEvent): void {
     if (event.data && event.data.trim()) {
       this.captureLetter(event.data.slice(-1).toLowerCase());
+      setTimeout(() => {
+        (event.target as HTMLInputElement).value = '';
+      }, 10);
     }
   }
 
-  captureLetter(typedLetter: string): void {
+  private captureLetter(typedLetter: string): void {
     this.letters$.pipe(withLatestFrom(this.indexSubject), take(1)).subscribe(([letters, index]) => {
-      const letter = letters[index].symbol;
+      const letter = get(letters[index], 'symbol', '');
       if (letter.toLowerCase() === typedLetter) {
         let maxIndex = letters.length - 1;
         if (index < maxIndex) {
