@@ -9,7 +9,12 @@ import { LetterComponent } from './letter/letter.component';
 
 @NgModule({
   declarations: [AppComponent, LetterComponent],
-  imports: [BrowserModule, BrowserAnimationsModule, NgxAliasModule, ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })],
+  imports: [
+    BrowserModule,
+    BrowserAnimationsModule,
+    NgxAliasModule,
+    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

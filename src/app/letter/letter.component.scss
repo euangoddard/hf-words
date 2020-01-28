@@ -1,14 +1,14 @@
 :host {
-	font-size: 20vmin;
-	display: inline-block;
-	transform-origin: center center;
+  font-size: 20vmin;
+  display: inline-block;
+  transform-origin: center center;
 }
 
 span {
-	opacity: 0.25;
-	transition: opacity 1s ease;
+  opacity: 0.25;
+  transition: opacity 1s ease;
 
-	&.done {
-		opacity: 1;
-	}
+  &.done {
+    opacity: 1;
+  }
 }

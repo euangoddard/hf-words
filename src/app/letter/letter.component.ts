@@ -1,7 +1,6 @@
 import { Component, ElementRef, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { ConfettiService } from 'src/app/confetti.service';
 
-
 @Component({
   selector: 'hfw-letter',
   template: `
@@ -23,7 +22,6 @@ export class LetterComponent implements OnChanges {
     const doneChange = changes['done'];
     if (doneChange && doneChange.currentValue && !doneChange.previousValue) {
       this.confetti.explode(this.element);
-
     }
   }
 }
