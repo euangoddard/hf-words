@@ -20,7 +20,7 @@ import { WordsService } from 'src/app/words.service';
       class="hidden-capture"
       type="text"
       autofocus
-      (keyup)="captureLetter($event)"
+      (input)="handleInput($event)"
       (blur)="refocusCapture($event)"
     />
   `,
@@ -70,10 +70,16 @@ export class AppComponent implements OnInit {
     });
   }
 
-  captureLetter(event: KeyboardEvent): void {
+  handleInput(event: InputEvent): void {
+    if (event.data && event.data.trim()) {
+      this.captureLetter(event.data.slice(-1).toLowerCase());
+    }
+  }
+
+  captureLetter(typedLetter: string): void {
     this.letters$.pipe(withLatestFrom(this.indexSubject), take(1)).subscribe(([letters, index]) => {
       const letter = letters[index].symbol;
-      if (letter.toLowerCase() === event.key.toLowerCase()) {
+      if (letter.toLowerCase() === typedLetter) {
         let maxIndex = letters.length - 1;
         if (index < maxIndex) {
           this.indexSubject.next(index + 1);
