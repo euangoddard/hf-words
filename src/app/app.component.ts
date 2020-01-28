@@ -1,5 +1,5 @@
 import { animate, style, transition, trigger } from '@angular/animations';
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, OnInit, Type, ViewChild } from '@angular/core';
 import { get } from 'lodash-es';
 import { BehaviorSubject, combineLatest, merge, Observable, Subject } from 'rxjs';
 import { map, pluck, take, withLatestFrom } from 'rxjs/operators';
@@ -9,6 +9,7 @@ import { WordsService } from 'src/app/words.service';
 @Component({
   selector: 'hfw-root',
   template: `
+    <p>Read the word aloud and type its letters</p>
     <div *alias="letters$ | async as letters">
       <hfw-letter
         *ngFor="let letter of letters; trackBy: trackByLetter"
@@ -17,10 +18,16 @@ import { WordsService } from 'src/app/words.service';
         @letterAnimation
       ></hfw-letter>
     </div>
+    <hfw-progress
+      *alias="progress$ | async as progress"
+      [correct]="progress.index"
+      [total]="progress.total"
+    ></hfw-progress>
     <input
       class="hidden-capture"
       type="text"
       autofocus
+      #hiddenInput
       (input)="handleInput($event)"
       (blur)="refocusCapture($event)"
     />
@@ -33,14 +40,19 @@ import { WordsService } from 'src/app/words.service';
         style({ opacity: 0, transform: 'scale(0.01)' }),
         animate('0.5s', style({ opacity: 1, transform: 'scale(1)' })),
       ]),
-      transition(':leave', [animate('0.5s', style({ opacity: 0, transform: 'scale(0)' }))]),
+      transition(':leave', [
+        animate('0.5s ease-out', style({ opacity: 0, transform: 'translateY(100%)' })),
+      ]),
     ]),
   ],
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, AfterViewInit {
   readonly trackByLetter = (index: number, letter: Letter) => `${letter.word}:${letter.symbol}`;
 
   letters$: Observable<Letter[]>;
+  readonly progress$ = this.wordsService.word$;
+
+  @ViewChild('hiddenInput') private inputElement: ElementRef<HTMLInputElement>;
 
   private readonly indexSubject = new BehaviorSubject<number>(0);
   private readonly emptySubject = new Subject<string>();
@@ -69,6 +81,11 @@ export class AppComponent implements OnInit {
     this.swUpdatesService.updateActivated.subscribe(() => {
       console.log('activated update!');
     });
+  }
+
+  ngAfterViewInit(): void {
+    this.inputElement.nativeElement.focus();
+
   }
 
   handleInput(event: InputEvent): void {

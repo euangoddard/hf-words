@@ -3,12 +3,13 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { NgxAliasModule } from 'ngx-alias';
+import { ProgressComponent } from 'src/app/progress/progress.component';
 import { environment } from '../environments/environment';
 import { AppComponent } from './app.component';
 import { LetterComponent } from './letter/letter.component';
 
 @NgModule({
-  declarations: [AppComponent, LetterComponent],
+  declarations: [AppComponent, LetterComponent, ProgressComponent],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
