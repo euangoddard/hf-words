@@ -1,5 +1,4 @@
-import { DOCUMENT } from '@angular/common';
-import { Inject, Injectable, NgZone } from '@angular/core';
+import { Injectable, NgZone } from '@angular/core';
 import { create as createConfetti, Options } from 'canvas-confetti';
 
 type Confetti = (options?: Options) => Promise<null> | null;
@@ -10,12 +9,8 @@ type Confetti = (options?: Options) => Promise<null> | null;
 export class ConfettiService {
   private readonly confetti: Confetti;
 
-  constructor(private readonly zone: NgZone, @Inject(DOCUMENT) docRef: Document) {
-    const canvas = docRef.createElement('canvas');
-    canvas.setAttribute('width', `${window.innerWidth}`);
-    canvas.setAttribute('height', `${window.innerHeight}`);
-    docRef.body.appendChild(canvas);
-    this.confetti = createConfetti(canvas, { resize: true, useWorker: true } as any);
+  constructor(private readonly zone: NgZone) {
+    this.confetti = createConfetti(null as any, { resize: true, useWorker: true } as any);
   }
 
   explode(element: HTMLElement): void {

@@ -17,7 +17,7 @@ import { WordsService } from 'src/app/words.service';
 @Component({
   selector: 'hfw-root',
   template: `
-    <p>Click anywhere to begin<br />Read the word aloud and type its letters</p>
+    <p>Tap anywhere to begin<br />Read the word aloud and type its letters</p>
     <div *alias="letters$ | async as letters">
       <hfw-letter
         *ngFor="let letter of letters; trackBy: trackByLetter"
