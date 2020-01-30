@@ -28,4 +28,24 @@ export class ConfettiService {
       });
     });
   }
+
+  fireworks(): void {
+    this.zone.runOutsideAngular(() => {
+      const end = Date.now() + 10 * 1000;
+      const interval = setInterval(() => {
+        if (Date.now() > end) {
+          return clearInterval(interval);
+        }
+        this.confetti({
+          startVelocity: 30,
+          spread: 360,
+          ticks: 60,
+          origin: {
+            x: Math.random(),
+            y: Math.random() - 0.2,
+          },
+        });
+      }, 200);
+    });
+  }
 }

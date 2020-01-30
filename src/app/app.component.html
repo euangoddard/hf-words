@@ -1,0 +1,29 @@
+<p>Tap anywhere to begin<br />Read the word aloud and type its letters</p>
+<div *ngIf="hasWon$ | async; else word" class="win-wrapper" @winAnimation>
+  <div class="win">You win!</div>
+  <button class="start-over-button" type="button" (click)="startAgain()">Start again</button>
+</div>
+<ng-template #word>
+  <div *alias="letters$ | async as letters">
+    <hfw-letter
+      *ngFor="let letter of letters; trackBy: trackByLetter"
+      [letter]="letter.symbol"
+      [done]="letter.done"
+      @letterAnimation
+    ></hfw-letter>
+  </div>
+  <input
+    class="hidden-capture"
+    type="text"
+    autofocus
+	#hiddenInput
+    (input)="handleInput($event)"
+    (blur)="refocusCapture($event)"
+  />
+</ng-template>
+
+<hfw-progress
+  *alias="progress$ | async as progress"
+  [correct]="progress.index"
+  [total]="progress.total"
+></hfw-progress>

@@ -1,45 +1,15 @@
 import { animate, style, transition, trigger } from '@angular/animations';
-import {
-  AfterViewInit,
-  ChangeDetectionStrategy,
-  Component,
-  ElementRef,
-  OnInit,
-  Type,
-  ViewChild,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { get } from 'lodash-es';
 import { BehaviorSubject, combineLatest, merge, Observable, Subject } from 'rxjs';
-import { map, pluck, take, withLatestFrom } from 'rxjs/operators';
+import { map, pairwise, pluck, take, withLatestFrom } from 'rxjs/operators';
+import { ConfettiService } from 'src/app/confetti.service';
 import { SwUpdatesService } from 'src/app/sw-update.service';
 import { WordsService } from 'src/app/words.service';
 
 @Component({
   selector: 'hfw-root',
-  template: `
-    <p>Tap anywhere to begin<br />Read the word aloud and type its letters</p>
-    <div *alias="letters$ | async as letters">
-      <hfw-letter
-        *ngFor="let letter of letters; trackBy: trackByLetter"
-        [letter]="letter.symbol"
-        [done]="letter.done"
-        @letterAnimation
-      ></hfw-letter>
-    </div>
-    <hfw-progress
-      *alias="progress$ | async as progress"
-      [correct]="progress.index"
-      [total]="progress.total"
-    ></hfw-progress>
-    <input
-      class="hidden-capture"
-      type="text"
-      autofocus
-      #hiddenInput
-      (input)="handleInput($event)"
-      (blur)="refocusCapture($event)"
-    />
-  `,
+  templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   animations: [
@@ -52,15 +22,22 @@ import { WordsService } from 'src/app/words.service';
         animate('0.5s ease-out', style({ opacity: 0, transform: 'translateY(100%)' })),
       ]),
     ]),
+    trigger('winAnimation', [
+      transition(':enter', [
+        style({ opacity: 0, transform: 'scale(0.01)' }),
+        animate('0.5s', style({ opacity: 1, transform: 'scale(1)' })),
+      ]),
+    ]),
   ],
 })
-export class AppComponent implements OnInit, AfterViewInit {
+export class AppComponent implements OnInit {
   readonly trackByLetter = (index: number, letter: Letter) => `${letter.word}:${letter.symbol}`;
 
   letters$: Observable<Letter[]>;
   readonly progress$ = this.wordsService.word$;
+  readonly hasWon$ = this.wordsService.word$.pipe(map(({ index, total }) => index === total));
 
-  @ViewChild('hiddenInput') private inputElement: ElementRef<HTMLInputElement>;
+  @ViewChild('hiddenInput') private hiddenInput: ElementRef;
 
   private readonly indexSubject = new BehaviorSubject<number>(0);
   private readonly emptySubject = new Subject<string>();
@@ -68,6 +45,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   constructor(
     private readonly wordsService: WordsService,
     private readonly swUpdatesService: SwUpdatesService,
+    private readonly confetti: ConfettiService,
   ) {}
 
   ngOnInit(): void {
@@ -89,10 +67,12 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.swUpdatesService.updateActivated.subscribe(() => {
       console.log('activated update!');
     });
-  }
 
-  ngAfterViewInit(): void {
-    this.inputElement.nativeElement.focus();
+    this.hasWon$.pipe(pairwise()).subscribe(([last, current]) => {
+      if (!last && current) {
+        this.confetti.fireworks()
+      }
+    })
   }
 
   handleInput(event: InputEvent): void {
@@ -127,6 +107,13 @@ export class AppComponent implements OnInit, AfterViewInit {
 
   refocusCapture(event: FocusEvent): void {
     (event.target as HTMLInputElement).focus();
+  }
+
+  startAgain(): void {
+    this.wordsService.refreshWords();
+    setTimeout(() => {
+      this.hiddenInput.nativeElement.focus();
+    }, 50);
   }
 }
 

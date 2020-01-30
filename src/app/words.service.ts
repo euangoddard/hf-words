@@ -124,7 +124,7 @@ export class WordsService {
 
   constructor() {
     this.nextSubject.pipe(withLatestFrom(this.indexSubject)).subscribe(([_, index]) => {
-      if (index < WORDS.length - 1) {
+      if (index < WORDS.length) {
         this.indexSubject.next(index + 1);
       }
     });
@@ -132,7 +132,7 @@ export class WordsService {
     this.word$ = combineLatest([this.wordsSubject, this.indexSubject]).pipe(
       map(([words, index]) => {
         return {
-          word: words[index],
+          word: words[index] || '',
           index,
           total: words.length,
         };

@@ -17,6 +17,59 @@ p {
   text-align: center;
 }
 
+@keyframes winColor {
+  0%,
+  100% {
+    color: white;
+  }
+  12.5% {
+    color: #a25afd;
+  }
+  25% {
+    color: #ff5e7e;
+  }
+  37.5% {
+    color: #88ff5a;
+  }
+  50% {
+    color: #fcff42;
+  }
+  62.5% {
+    color: #ffa62d;
+  }
+  75% {
+    color: #ff36ff;
+  }
+  87.5% {
+    color: #26ccff;
+  }
+}
+
+.win-wrapper {
+  text-align: center;
+}
+
+.win {
+  font-size: 10vw;
+  font-family: 'Montserrat', sans-serif;
+  animation: winColor linear 5s infinite;
+  opacity: 0.65;
+  margin-bottom: 1rem;
+}
+
+.start-over-button {
+  appearance: none;
+  font-family: inherit;
+  font-size: 1.5rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  background: white;
+  padding: 1rem;
+  border: none;
+  border-radius: 0.25rem;
+  cursor: pointer;
+}
+
 .hidden-capture {
   opacity: 0.01;
   position: fixed;

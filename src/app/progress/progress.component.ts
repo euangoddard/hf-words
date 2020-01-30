@@ -6,7 +6,7 @@ import { isNumber } from 'lodash-es';
   template: `
     <div>{{ correct }} of {{ total }}</div>
     <div class="track">
-      <div class="track-bar" [ngClass]="colorClass" [style.width.%]="(100 * correct) / total"></div>
+      <div class="track-bar" [ngClass]="colorClass" [style.width.%]="percentage"></div>
     </div>
   `,
   styleUrls: ['./progress.component.scss'],
@@ -27,7 +27,7 @@ export class ProgressComponent implements OnChanges {
   }
 
   private getColorClass(): string {
-    const steps = 8;
+    const steps = 7;
     const breakpoint = 100 / steps;
     if (this.percentage < breakpoint) {
       return 'track-bar--col-1';
