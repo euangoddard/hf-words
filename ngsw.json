@@ -1,23 +1,23 @@
 {
   "configVersion": 1,
-  "timestamp": 1580394160357,
+  "timestamp": 1651867179845,
   "index": "/index.html",
   "assetGroups": [
     {
       "name": "app",
       "installMode": "prefetch",
       "updateMode": "prefetch",
+      "cacheQueryOptions": {
+        "ignoreVary": true
+      },
       "urls": [
         "/favicon.ico",
         "/index.html",
-        "/main-es2015.35f79cd14169ef73f1f3.js",
-        "/main-es5.35f79cd14169ef73f1f3.js",
+        "/main.6b57371c6e18a906.js",
         "/manifest.webmanifest",
-        "/polyfills-es2015.66f22d07ce30f308d850.js",
-        "/polyfills-es5.c3a971024c04f75f1c83.js",
-        "/runtime-es2015.0d18029cc48539ed2f99.js",
-        "/runtime-es5.0d18029cc48539ed2f99.js",
-        "/styles.d146f8c3b2e2d4b21cd1.css"
+        "/polyfills.4f3294b1bedc8fd4.js",
+        "/runtime.57ffc446a6ddcf5c.js",
+        "/styles.69ef7d091cdb520f.css"
       ],
       "patterns": []
     },
@@ -25,6 +25,9 @@
       "name": "assets",
       "installMode": "lazy",
       "updateMode": "prefetch",
+      "cacheQueryOptions": {
+        "ignoreVary": true
+      },
       "urls": [
         "/assets/icons/android-chrome-192x192.png",
         "/assets/icons/android-chrome-512x512.png",
@@ -45,15 +48,12 @@
     "/assets/icons/favicon-16x16.png": "9a60d4a3687012ceeadd0f7bb26e2d9662ff6340",
     "/assets/icons/favicon-32x32.png": "9e5769c049ab55d8cbd3eb5b271dee800b1f53e6",
     "/favicon.ico": "a8b299dba7d8d4f1e367ba0562739a4eddbaf12e",
-    "/index.html": "47efd5e6f5adf4a44b011d7c4ba7163b0dedeed2",
-    "/main-es2015.35f79cd14169ef73f1f3.js": "f420cf7d13749d342d479286b4889079a751ac32",
-    "/main-es5.35f79cd14169ef73f1f3.js": "d8ccff25c405919f664e6434062d02f5250b3c24",
+    "/index.html": "d61d0cb5acb4293c5c37067c3c088db1d352bd54",
+    "/main.6b57371c6e18a906.js": "6f59b592df3c9984d9b12be1f78766159d543751",
     "/manifest.webmanifest": "2656a6ff05eda1ead7d25fcead509c904cc0b68a",
-    "/polyfills-es2015.66f22d07ce30f308d850.js": "8779ed8d9bf0580e1b50b352a9b8fd520be24433",
-    "/polyfills-es5.c3a971024c04f75f1c83.js": "265946cd9cab1b54c805b1580c6c30ed7c3f3e18",
-    "/runtime-es2015.0d18029cc48539ed2f99.js": "a9aafcf49f49145093fc831efd9b8e2f6c71bb9c",
-    "/runtime-es5.0d18029cc48539ed2f99.js": "a9aafcf49f49145093fc831efd9b8e2f6c71bb9c",
-    "/styles.d146f8c3b2e2d4b21cd1.css": "9586500badc3be3c0d17c42da08b8244ab7591fc"
+    "/polyfills.4f3294b1bedc8fd4.js": "62a66aed1b6953214670250bfeec642c368311f1",
+    "/runtime.57ffc446a6ddcf5c.js": "977cd18b5befd5b3f2545e6fee919c5382dbe89b",
+    "/styles.69ef7d091cdb520f.css": "0004a5701ef1b1b205b78669aaac63d5dca85954"
   },
   "navigationUrls": [
     {
@@ -72,5 +72,6 @@
       "positive": false,
       "regex": "^\\/(?:.+\\/)?[^/]*__[^/]*\\/.*$"
     }
-  ]
+  ],
+  "navigationRequestStrategy": "performance"
 }
