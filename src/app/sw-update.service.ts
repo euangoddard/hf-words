@@ -17,7 +17,7 @@ export class SwUpdatesService implements OnDestroy {
     }
 
     // Periodically check for updates (after the app is stabilized).
-    const appIsStable = appRef.isStable.pipe(first(v => v));
+    const appIsStable = appRef.isStable.pipe(first((v) => v));
     concat(appIsStable, interval(this.checkInterval)).subscribe(() =>
       this.swUpdate.checkForUpdate(),
     );
@@ -26,7 +26,7 @@ export class SwUpdatesService implements OnDestroy {
     this.swUpdate.available.subscribe(() => this.swUpdate.activateUpdate());
 
     // Notify about activated updates.
-    this.updateActivated = this.swUpdate.activated.pipe(map(evt => evt.current.hash));
+    this.updateActivated = this.swUpdate.activated.pipe(map((evt) => evt.current.hash));
   }
 
   ngOnDestroy(): void {}

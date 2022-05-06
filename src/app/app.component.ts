@@ -33,11 +33,11 @@ import { WordsService } from 'src/app/words.service';
 export class AppComponent implements OnInit {
   readonly trackByLetter = (index: number, letter: Letter) => `${letter.word}:${letter.symbol}`;
 
-  letters$: Observable<Letter[]>;
+  letters$!: Observable<Letter[]>;
   readonly progress$ = this.wordsService.word$;
   readonly hasWon$ = this.wordsService.word$.pipe(map(({ index, total }) => index === total));
 
-  @ViewChild('hiddenInput') private hiddenInput: ElementRef;
+  @ViewChild('hiddenInput') private hiddenInput!: ElementRef;
 
   private readonly indexSubject = new BehaviorSubject<number>(0);
   private readonly emptySubject = new Subject<string>();
@@ -70,9 +70,9 @@ export class AppComponent implements OnInit {
 
     this.hasWon$.pipe(pairwise()).subscribe(([last, current]) => {
       if (!last && current) {
-        this.confetti.fireworks()
+        this.confetti.fireworks();
       }
-    })
+    });
   }
 
   handleInput(event: InputEvent): void {

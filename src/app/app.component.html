@@ -15,8 +15,10 @@
   <input
     class="hidden-capture"
     type="text"
+    autocomplete="off"
+    autocapitalize="off"
     autofocus
-	#hiddenInput
+    #hiddenInput
     (input)="handleInput($event)"
     (blur)="refocusCapture($event)"
   />

@@ -22,7 +22,8 @@
     "noImplicitReturns": true,
     "noImplicitThis": true,
     "noFallthroughCasesInSwitch": true,
-    "strictNullChecks": true
+    "strictNullChecks": true,
+    "strict": true
   },
   "angularCompilerOptions": {
     "fullTemplateTypeCheck": true,

@@ -104,7 +104,7 @@ const WORDS = [
   'with',
   'you',
   'your',
-];
+] as const;
 
 interface WordData {
   word: string;

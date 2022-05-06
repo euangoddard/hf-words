@@ -13,11 +13,11 @@ import { isNumber } from 'lodash-es';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProgressComponent implements OnChanges {
-  @Input() correct: number;
-  @Input() total: number;
+  @Input() correct!: number;
+  @Input() total!: number;
 
-  percentage: number;
-  colorClass: string;
+  percentage!: number;
+  colorClass!: string;
 
   ngOnChanges(changes: SimpleChanges): void {
     if (isNumber(this.correct) && isNumber(this.total)) {
