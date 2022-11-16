@@ -32,7 +32,7 @@ export class ConfettiService {
   fireworks(): void {
     this.zone.runOutsideAngular(() => {
       const end = Date.now() + 10 * 1000;
-      const interval = setInterval(() => {
+      const interval: any = setInterval(() => {
         if (Date.now() > end) {
           return clearInterval(interval);
         }
