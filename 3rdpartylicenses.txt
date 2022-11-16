@@ -84,7 +84,6 @@ terms above.
 
 
 ngx-alias
-MIT
 
 rxjs
 Apache-2.0
